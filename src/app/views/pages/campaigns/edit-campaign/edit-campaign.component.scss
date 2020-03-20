@@ -1,0 +1,26 @@
+@import url(http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css);
+body{margin-top:50px;background: rgb(36, 39, 41);}
+
+
+
+input[type="file"] {
+    display: none;
+}
+.custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+    margin-top: 15px;
+}
+
+.contain{
+    display:inline-block;
+    position:relative;
+}
+
+.contain   label{
+    position:absolute;
+    top: 40%;
+    left:40%;
+}

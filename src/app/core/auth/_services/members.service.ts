@@ -1,0 +1,36 @@
+import { Injectable } from '@angular/core';
+import {HttpClient,HttpHeaders} from '@angular/common/http';
+import {Observable} from 'rxjs';
+
+// Environment
+import {CreateURL} from './publicURL'
+
+const _url = CreateURL.createURL;
+
+
+@Injectable({
+    providedIn: 'root'
+})
+
+
+export class memberService {
+
+     membersURL=_url('admin/members');
+
+    constructor(private http: HttpClient) { }
+    headers:HttpHeaders =new HttpHeaders().set('Content-Type','application/json');
+   getmembersInformation():Observable<any> {
+     return this.http.get<any>(`${this.membersURL}`,{ headers: this.headers })
+   }
+
+
+
+  deleteMember(id): Observable<any> {
+    return this.http.delete<any>(`${this.membersURL}/${id}`)
+  }
+
+  getMemberById(id): Observable<any> {
+    return this.http.get<any>(`${this.membersURL}/${id}`)
+  }
+
+}

@@ -1,0 +1,101 @@
+<kt-portlet>
+    <kt-portlet-header title="Limit Setting" [class]="'kt-portlet__head--lg'">
+        <ng-container ktPortletTools>
+            <a [routerLink]="['../../']" class="btn btn-secondary kt-margin-r-10" mat-raised-button
+                matTooltip="Back to home">
+                <i class="la la-arrow-left"></i>
+                <span class="kt-hidden-mobile">Back</span>
+            </a>
+            <a href="javascript:;" class="btn btn-secondary kt-margin-r-10" (click)="reset()" mat-raised-button
+                matTooltip="Reset changes">
+                <i class="la la-cog"></i>
+                <span class="kt-hidden-mobile">Reset</span>
+            </a>
+            <a href="javascript:;" class="btn btn-primary kt-margin-r-10" color="primary" (click)="onSumbit(false)"
+                mat-raised-button matTooltip="Save & Continue">
+                <span>Save</span>
+            </a>
+        </ng-container>
+    </kt-portlet-header>
+
+    <kt-portlet-body>
+        <!--begin::Form-->
+        <div *ngIf="setting">
+            <form [formGroup]="settingForm" class="kt-form kt-form--group-seperator-dashed">
+                <kt-alert *ngIf="hasFormErrors" type="warn" [showCloseButton]="true" [duration]="50000"
+                    (close)="onAlertClose($event)">
+                    Oh snap! Change a few things up and try submitting again.
+                </kt-alert>
+                <div class="kt-form__section kt-form__section--first">
+                    <div class="form-group kt-form__group row">
+                        <div class="col-lg-6 col-md-6 kt-margin-bottom-20-mobile">
+                            <mat-form-field class="mat-form-field-fluid">
+                                <input type="number" [min]="1"   matInput  placeholder="Enter Number Of Campaigns To Show" formControlName="numberOfCampaignsToShow" />
+                                <mat-error>Number Of Campaigns To Show is
+                                    <strong>required</strong>
+                                </mat-error>
+                                <mat-hint align="start">Please enter
+                                    <strong>Number Of Campaigns To Show</strong>
+                                </mat-hint>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-6 col-md-6 kt-margin-bottom-20-mobile">
+                            <mat-form-field class="mat-form-field-fluid">
+                                <input type="number" [min]="1" matInput  placeholder="Enter Allowed File Size" formControlName="allowedFileSize" />
+                                <mat-error>Allowed File Size is
+                                    <strong>required</strong>
+                                </mat-error>
+                                <mat-hint align="start">Please enter
+                                    <strong>Allowed File Size</strong>
+                                </mat-hint>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="form-group kt-form__group row">
+                        <div class="col-lg-6 col-md-6 kt-margin-bottom-20-mobile">
+                            <mat-form-field class="mat-form-field-fluid">
+                                <input type="number" [min]="1"  matInput  placeholder="Enter Minimum Amount Of Campaign" formControlName="minimumAmountOfCampaign" />
+                                <mat-hint align="start">Please enter
+                                    <strong>Minimum Amount Of Campaign</strong>
+                                </mat-hint>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-6 col-md-6 kt-margin-bottom-20-mobile">
+                            <mat-form-field class="mat-form-field-fluid">
+                                <input type="number" [min]="1"  matInput  placeholder="Enter Max Amount Of Campaign" formControlName="maxAmountOfCampaign" />
+                                <mat-hint align="start">Please enter
+                                    <strong>Max Amount Of Campaign</strong>
+                                </mat-hint>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="form-group kt-form__group row">
+                        <div class="col-lg-6 col-md-6 kt-margin-bottom-20-mobile">
+                            <mat-form-field class="mat-form-field-fluid">
+                                <input type="number" [min]="1" matInput  placeholder="Enter Minimum Amount Of Donations" formControlName="minimumAmountOfDonations" />
+                                <mat-error>Minimum Amount Of Donations is
+                                    <strong>required</strong>
+                                </mat-error>
+                                <mat-hint align="start">Please enter
+                                    <strong>Minimum Amount Of Donations</strong>
+                                </mat-hint>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-6 col-md-6 kt-margin-bottom-20-mobile">
+                            <mat-form-field class="mat-form-field-fluid">
+                                <input type="number" [min]="1"  matInput  placeholder="Enter Max Amount Of Donations"
+                                    formControlName="maxAmountOfDonations" />
+                                <mat-error>Max Amount Of Donations is
+                                    <strong>required</strong>
+                                </mat-error>
+                                <mat-hint align="start">Please enter
+                                    <strong>Max Amount Of Donations</strong>
+                                </mat-hint>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </kt-portlet-body>
+</kt-portlet>

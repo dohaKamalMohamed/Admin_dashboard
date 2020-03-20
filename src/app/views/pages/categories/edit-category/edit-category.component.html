@@ -1,0 +1,87 @@
+<kt-portlet>
+    <kt-portlet-header title="Edit Category" [class]="'kt-portlet__head--lg'" [viewLoading$]="loading$">
+        <ng-container ktPortletTools>
+            <a [routerLink]="['/categories']" class="btn btn-secondary kt-margin-r-10" mat-raised-button
+                matTooltip="Back to the users list">
+                <i class="la la-arrow-left"></i>
+                <span class="kt-hidden-mobile">Back</span>
+            </a>
+            <a href="javascript:;" class="btn btn-primary kt-margin-r-10" color="primary"
+                (click)="onSumbit()" mat-raised-button matTooltip="Save & Continue">
+                <span class="kt-hidden-mobile">Save</span>
+            </a>
+        </ng-container>
+    </kt-portlet-header>
+    <kt-portlet-body>
+
+        <!--begin::Form-->
+        <div *ngIf="category">
+            <form [formGroup]="categoryForm" class="kt-form kt-form--group-seperator-dashed">
+                <kt-alert *ngIf="hasFormErrors" type="warn" [showCloseButton]="true" [duration]="50000"
+                    (close)="onAlertClose($event)">
+                    Oh snap! Change a few things up and try submitting again.
+                </kt-alert>
+                <kt-alert *ngIf="errorMessage" type="warn" [showCloseButton]="true" [duration]="50000"
+                    (close)="onAlertClose($event)">
+                    {{errorMessage}}.
+                </kt-alert>
+                <div class="kt-form__section kt-form__section--first">
+                    <div class="row">
+                        <div class="col-lg-8 col-md-8">
+                            <div class="form-group kt-form__group row">
+                                <div class="col-lg-6 col-md-6 kt-margin-bottom-20-mobile">
+                                    <mat-form-field class="mat-form-field-fluid">
+                                        <input matInput placeholder="Enter Category Name" formControlName="name" />
+                                        <mat-error>Category Name is
+                                            <strong>required</strong>
+                                        </mat-error>
+                                        <mat-hint align="start">Please enter
+                                            <strong>Category Name</strong>
+                                        </mat-hint>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-lg-6 col-md-6 kt-margin-bottom-20-mobile">
+                                    <mat-form-field class="mat-form-field-fluid">
+                                        <input matInput placeholder="Enter Category URL" formControlName="slug" />
+                                        <mat-error>Category Slug is
+                                            <strong>required</strong>
+                                        </mat-error>
+                                        <mat-hint align="start">Please enter
+                                            <strong>Category Slug</strong>
+                                        </mat-hint>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="form-group kt-form__group row">
+                                <div class="col-lg-12 col-md-12 kt-margin-bottom-20-mobile">
+
+                                    <mat-radio-group formControlName="mode">
+                                        <label style="margin:5px">Mode</label>
+                                        <mat-radio-button value='on'>On</mat-radio-button>
+                                        <mat-radio-button value='off'>Off</mat-radio-button>
+
+                                    </mat-radio-group>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4">
+                            <div class="fileinput fileinput-new" data-provides="fileinput">
+                                <div class="fileinput-new thumbnail" style="width: 300px; height: 300px;">
+                                    <img *ngIf="!imageprivew"
+                                        src="http://www.placehold.it/300x300/EFEFEF/AAAAAA&amp;text=no+image" alt="">
+                                    <img *ngIf="imageprivew" src="{{imageprivew}}" alt="membership image"
+                                        style="width: 300px; height: 300px;">
+                                </div>
+                                <label for="file-upload" class="custom-file-upload fileinput-new btn btn-success btn-s">
+                                    <i class="fa fa-cloud-upload"></i> Upload Image</label>
+                                <input id="file-upload" type="file" name="file" #input_image
+                                    (change)="handleUpload($event)" formControlName="image"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!--end::Form-->
+    </kt-portlet-body>
+</kt-portlet>

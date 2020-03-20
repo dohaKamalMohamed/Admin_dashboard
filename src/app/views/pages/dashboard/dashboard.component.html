@@ -1,0 +1,156 @@
+<div class="row bd-highlight card-dashBoard">
+	<div class="col-xl-2 col-lg-2 col-md-12 col-sm-12">
+		<div class="card-body ">
+			<img class="rounded mx-auto d-block" src="../assets/media/icons/money.png" alt="">
+			<h5 class="card-title pt-2 h4 text-center" style=" color:#0d2175;">Donations</h5>
+			<h5 *ngIf="NumberOfDonors" class="card-title h4 text-center" style=" color: #415192">{{NumberOfDonors}}</h5>
+			<h5 *ngIf="!NumberOfDonors" class="card-title h4 text-center" style=" color: #415192">0</h5>
+		</div>
+	</div>
+
+	<div class="col-xl-2 col-lg-2 col-md-12 col-sm-12">
+		<div class="card-body">
+			<img class="rounded mx-auto d-block" src="../assets/media/icons/doller.png" alt="">
+			<h5 class="card-title pt-2 h4 text-center" style=" color:#0d2175; ">Funds Raised</h5>
+			<h5 *ngIf="FundsRaised" class="card-title h4 text-center" style=" color: #415192">{{FundsRaised}}</h5>
+			<h5 *ngIf="!FundsRaised" class="card-title h4 text-center" style=" color: #415192">0</h5>
+		</div>
+	</div>
+	<div class="col-xl-2 col-lg-2 col-md-12 col-sm-12">
+		<div class="card-body">
+			<img class="rounded mx-auto d-block" src="../assets/media/icons/megaphone.png" alt="">
+			<h5 class="card-title pt-2 h4 text-center" style="color:#0d2175;">Campaigns</h5>
+			<h5 *ngIf="Campaigns" class="card-title h4 text-center" style=" color: #415192">{{Campaigns}}
+			</h5>
+			<h5 *ngIf="!Campaigns" class="card-title h4 text-center" style=" color: #415192">0
+			</h5>
+		</div>
+	</div>
+	<div class="col-xl-2 col-lg-2 col-md-12 col-sm-12">
+		<div class=" card-body h5">
+			<img class="rounded mx-auto d-block" src="../assets/media/icons/male.png" alt="">
+			<h5 class="card-title pt-2 h4 text-center" style="color:#0d2175;">Members</h5>
+			<h5 *ngIf="Members" class="card-title h4 text-center" style=" color: #415192">{{Members}}
+			</h5>
+			<h5 *ngIf="!Members" class="card-title h4 text-center" style=" color: #415192">0
+			</h5>
+		</div>
+	</div>
+
+	<div class="col-xl-2 col-lg-2 col-md-12 col-sm-12">
+		<div class=" card-body">
+			<img class="rounded mx-auto d-block" src="../assets/media/icons/team.png" alt="">
+			<h5 class="card-title pt-2 h4 text-center" style=" color:#0d2175;">Subscription</h5>
+			<h5 *ngIf="Subscription" class="card-title h4 text-center" style=" color: #415192">{{Subscription}}</h5>
+			<h5 *ngIf="!Subscription" class="card-title h4 text-center" style=" color: #415192">0</h5>
+		</div>
+	</div>
+</div>
+
+<div class="row mt-4">
+	<div class="col-xl-4">
+		<kt-portlet [class]="'kt-portlet--height-fluid'">
+			<kt-portlet-header [title]="'Donations'">
+				<ng-container ktPortletTools>
+					<kt-context-menu2></kt-context-menu2>
+				</ng-container>
+			</kt-portlet-header>
+			<kt-portlet-body>
+				<kt-widget12></kt-widget12>
+			</kt-portlet-body>
+		</kt-portlet>
+	</div>
+
+	<div class="col-xl-4">
+		<kt-portlet [class]="'kt-portlet--height-fluid'">
+			<kt-portlet-header [title]="'Members  '">
+				<ng-container ktPortletTools>
+					<kt-context-menu2></kt-context-menu2>
+				</ng-container>
+			</kt-portlet-header>
+			<kt-portlet-body>
+				<kt-widget12></kt-widget12>
+			</kt-portlet-body>
+		</kt-portlet>
+	</div>
+
+	<div class="col-xl-4">
+		<kt-portlet [class]="'kt-portlet--height-fluid'">
+			<kt-portlet-header [title]="'Subscription'">
+				<ng-container ktPortletTools>
+					<kt-context-menu2></kt-context-menu2>
+				</ng-container>
+			</kt-portlet-header>
+			<kt-portlet-body>
+				<kt-widget12></kt-widget12>
+			</kt-portlet-body>
+		</kt-portlet>
+	</div>
+</div>
+
+<div class="row mt-4">
+	<div class="col-xl-6 col-lg-6 col-md-6 ">
+		<div class="card" style="background-color:#eaeae4">
+			<div class="card-body">
+				<h5 class="card-title pt-2 pl-2" style="font-size: 25px; color:#0c2074;">Recent Members</h5>
+				<div  *ngFor="let member of recent_members;let i=index" >
+				<div class="style-row pl-4" *ngIf="3>i">
+
+					<img src='https://donatetogo.org/public/avatar/{{member.avatar}}' class="mt-4" alt="Smiley face" width="60" height="60">
+
+					<div class='style-card ml-3'>
+						<i class="fas fa-genderless " style="font-size:25px; color: #1dc9b7;"></i>
+						<div class="vl ml-2"></div>
+						<i class="fas fa-genderless" style="font-size:25px; color: #1dc9b7;"></i>
+					</div>
+					<div class='style-card ml-3'>
+						<h6 class="card-title pt-2" style="font-size: 18px; color:#0d2174">{{member.name}}</h6>
+						<h5 class="card-title pt-0 " style="color:#58659a;">{{member.date | date}}
+						</h5>
+						<h5 class="card-title pt-0 " style="color: #58659a;">15</h5>
+						<h5 class="card-title pt-0" style="color: #58659a;">$21.66</h5>
+					</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<a href="">
+			<h5 class="card-title ml-1 pt-3 align-content-center" style="font-size: 15px; align-self:center; margin-left: 55;">
+			 View all
+			</h5>
+		</a>
+	</div>
+
+	<div class="col-xl-6 col-lg-6 col-md-6">
+		<div class="card " style=" background-color:#eaeae4">
+			<div class="card-body">
+				<h5 class="card-title pt-2 pl-2" style="font-size: 25px; color:#0c2074;">Recent Campaigns</h5>
+				<div class="style-row  pl-4" *ngFor="let campaign of recent_campaigns">
+					<img src='https://donatetogo.org/public/campaigns/small/{{campaign.small_image}}' class="mt-4" alt="Smiley face" width="60" height="60">
+
+					<div class='style-card ml-2'>
+						<i class="fas fa-genderless " style="font-size:25px; color: #1dc9b7; "></i>
+						<div class="vl ml-2"></div>
+						<i class="fas fa-genderless" style="font-size:25px; color: #1dc9b7;"></i>
+					</div>
+					<div class='style-card ml-3'>
+						<h6 class="card-title pt-2" style="font-size: 18px; color:#0d2174">{{campaign.title}}</h6>
+						<h5 class="card-title pt-1" style=" color: #58659a;"> by Hilal Tech / {{campaign.date | date}}
+						</h5>
+						<div class="progress">
+							<div class="progress-bar bg-success pt-2" role="progressbar" style="width: 25%"
+								aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+						</div>
+						<h6 class="card-title pt-3 text-success" style="font-size: 18px;">{{campaign.status}}</h6>
+
+					</div>
+				</div>
+			</div>
+		</div>
+		<a href="">
+			<h5 class="card-title ml-1 pt-3" style="font-size: 15px; align-self:center; margin-left: 55;">
+			 View all
+			</h5>
+			</a>
+	</div>
+</div>

@@ -1,0 +1,112 @@
+<kt-portlet>
+    <kt-portlet-header title="Create Campaign" [class]="'kt-portlet__head--lg'" [viewLoading$]="loading$">
+        <ng-container ktPortletTools>
+            <a [routerLink]="['../']" class="btn btn-secondary kt-margin-r-10" mat-raised-button
+                matTooltip="Back to the users list">
+                <i class="la la-arrow-left"></i>
+                <span class="kt-hidden-mobile">Back</span>
+            </a>
+            <a href="javascript:;" class="btn btn-secondary kt-margin-r-10" (click)="reset()"
+                [disabled]="selectedTab !== 0" mat-raised-button matTooltip="Reset changes">
+                <i class="la la-cog"></i>
+                <span class="kt-hidden-mobile">Reset</span>
+            </a>
+            <a href="javascript:;" class="btn btn-primary kt-margin-r-10" color="primary" (click)="onSumbit(false)"
+                mat-raised-button matTooltip="Save & Continue">
+                <span class="kt-hidden-mobile">Save</span>
+            </a>
+        </ng-container>
+    </kt-portlet-header>
+    <kt-portlet-body>
+
+        <!--begin::Form-->
+        <div *ngIf="page">
+            <form [formGroup]="pageForm" class="kt-form kt-form--group-seperator-dashed">
+                <kt-alert *ngIf="hasFormErrors" type="warn" [showCloseButton]="true" [duration]="50000"
+                    (close)="onAlertClose($event)">
+                    Oh snap! Change a few things up and try submitting again.
+                </kt-alert>
+                <div class="kt-form__section kt-form__section--first">
+                    <div class="form-group kt-form__group row">
+                        <div class="fileinput fileinput-new contain" data-provides="fileinput">
+                            <div class="fileinput-new thumbnail" style="width: 800px; height: 300px;">
+                                <img *ngIf="!imageprivew"
+                                    src="http://www.placehold.it/800x300/EFEFEF/AAAAAA&amp;text=no+image" alt="">
+                                <img *ngIf="format=='image'" src="{{imageprivew}}" alt="membership image"
+                                    style="width: 800px; height: 300px;">
+                                <video controls *ngIf="format=='video'" alt="membership image"
+                                    style="width: 800px; height: 300px;">
+                                    <source src="{{imageprivew}}">
+                                </video>
+                            </div>
+                            <label for="file-upload" class="custom-file-upload fileinput-new btn btn-success btn-s">
+                                <i class="fa fa-cloud-upload"></i> Upload Image Or Video</label>
+                            <input id="file-upload" type="file" name="file" #input_image (change)="handleUpload($event)"
+                                ng2FileSelect [uploader]="uploader" />
+                        </div>
+                    </div>
+                    <div class="form-group kt-form__group row">
+                        <div class="col-lg-6 col-md-6 kt-margin-bottom-20-mobile">
+                            <mat-form-field class="mat-form-field-fluid">
+                                <input matInput placeholder="Enter Campaign Title" formControlName="title" />
+                                <mat-error>Campaign Title is
+                                    <strong>required</strong>
+                                </mat-error>
+                                <mat-hint align="start">Please enter
+                                    <strong>Campaign Title</strong>
+                                </mat-hint>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-6 col-md-6 kt-margin-bottom-20-mobile">
+                            <mat-form-field class="mat-form-field-fluid">
+                                <input matInput placeholder="Enter Campaign Category" formControlName="category" />
+                                <mat-error>Campaign Category is
+                                    <strong>required</strong>
+                                </mat-error>
+                                <mat-hint align="start">Please enter
+                                    <strong>Campaign Category</strong>
+                                </mat-hint>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="form-group kt-form__group row">
+                        <div class="col-lg-6 col-md-6 kt-margin-bottom-20-mobile">
+                            <mat-form-field class="mat-form-field-fluid">
+                                <input matInput placeholder="Enter Campaign Goal" formControlName="goal" />
+                                <mat-error>Campaign Goal is
+                                    <strong>required</strong>
+                                </mat-error>
+                                <mat-hint align="start">Please enter
+                                    <strong>Campaign Goal</strong>
+                                </mat-hint>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-6 col-md-6 kt-margin-bottom-20-mobile">
+                            <mat-form-field class="mat-form-field-fluid">
+                                <input matInput placeholder="Enter Campaign Location" formControlName="location" />
+                                <mat-error>Campaign Location is
+                                    <strong>required</strong>
+                                </mat-error>
+                                <mat-hint align="start">Please enter
+                                    <strong>Campaign Location</strong>
+                                </mat-hint>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <mat-form-field class="mat-form-field-fluid">
+
+                                <input matInput placeholder="Enter Campaign Description">
+                            </mat-form-field>
+                            <mat-hint align="start">Please enter
+                                <strong>Campaign Description</strong>
+                            </mat-hint>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!--end::Form-->
+    </kt-portlet-body>
+</kt-portlet>

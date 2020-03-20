@@ -1,0 +1,53 @@
+<kt-portlet>
+    <kt-portlet-body>
+        <!--begin::Form-->
+        <div *ngIf="setting">
+            <form [formGroup]="settingForm" class="kt-form kt-form--group-seperator-dashed">
+                <kt-alert *ngIf="hasFormErrors" type="warn" [showCloseButton]="true" [duration]="50000"
+                    (close)="onAlertClose($event)">
+                    Oh snap! Change a few things up and try submitting again.
+                </kt-alert>
+                <div class="kt-form__section kt-form__section--first">
+                    <div class="form-group kt-form__group row">
+                        <div class="col-lg-6 col-md-6 kt-margin-bottom-20-mobile">
+                            <mat-form-field class="mat-form-field-fluid">
+                                <input matInput placeholder="Enter Stripe Client ID" formControlName="stripeClientID" />
+                                <mat-error>Stripe Client ID is
+                                    <strong>required</strong>
+                                </mat-error>
+                                <mat-hint align="start">Please enter
+                                    <strong>Stripe Client ID</strong>
+                                </mat-hint>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="form-group kt-form__group row">
+                        <div class="col-lg-6 col-md-6 kt-margin-bottom-20-mobile">
+                            <mat-form-field class="mat-form-field-fluid">
+                                <input matInput placeholder="Enter Stripe Secret Key"
+                                    formControlName="stripeSecretKey" />
+                                <mat-hint align="start">Please enter
+                                    <strong>Stripe Secret Key</strong>
+                                </mat-hint>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="form-group kt-form__group row">
+                        <div class="col-lg-6 col-md-6 kt-margin-bottom-20-mobile">
+                            <mat-form-field class="mat-form-field-fluid">
+                                <input matInput placeholder="Enter Stripe Publishable Key"
+                                    formControlName="stripePublishableKey" />
+                                <mat-error>Stripe Publishable Key is
+                                    <strong>required</strong>
+                                </mat-error>
+                                <mat-hint align="start">Please enter
+                                    <strong>Stripe Publishable Key</strong>
+                                </mat-hint>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </kt-portlet-body>
+</kt-portlet>

@@ -1,0 +1,150 @@
+<kt-portlet>
+	<!-- PORTLET LOADING | Binded to TABLE Datasource -->
+	<!-- See prop => '~/core/_crud/models/data-sources/_base.datasource.ts' (loading$) -->
+	<kt-portlet-header [title]="'Subscriptions'" [class]="'kt-portlet__head--lg'">
+		<ng-container ktPortletTools>
+			<button [routerLink]="['./add']" mat-raised-button color="primary" class="pl-4 pr-4">Back</button>
+			<!-- Buttons (Material Angular) | See off.documenations 'https://material.angular.io/components/button/overview' -->
+			<!-- mat-raised-button | Rectangular contained button w/ elevation  -->
+		</ng-container>
+	</kt-portlet-header>
+	<!-- end::Header -->
+	<!-- start::Body (attribute: ktPortletBody) -->
+	<kt-portlet-body>
+
+			<div class="kt-form__filtration">
+					<div class="row align-items-center">
+						<div class="col-md-4 kt-margin-bottom-30-mobile">
+							<!-- 'm  margin-bottom-10-mobile' for adaptive make-up  -->
+							<div class="kt-form__control">
+								<mat-form-field class="mat-form-field-fluid">
+									<mat-label>Organization Name</mat-label>
+									<mat-select [(ngModel)]="selectedOrganiztion" (selectionChange)="filterDonation()">
+										<mat-option [value]="0">All</mat-option>
+										<mat-option *ngFor="let member of membersList" [value]="member.id">
+											{{member.name}}
+										</mat-option>
+									</mat-select>
+									<mat-hint align="start">
+										<strong>Filter</strong> by Organization 
+									</mat-hint>
+								</mat-form-field>
+							</div>
+						</div>
+	
+						<div class="col-md-4 kt-margin-bottom-30-mobile">
+								<div class="kt-form__control">
+										<mat-form-field class="mat-form-field-fluid">
+											<mat-label>Campain Status</mat-label>
+											<mat-select [(ngModel)]="selectedCampaign" (selectionChange)="filterDonation()">
+													<mat-option [value]="0">All</mat-option>
+												<mat-option *ngFor="let campaign of CampaignsResult" [value]="campaign.id">{{campaign.title}}</mat-option>
+												
+											</mat-select>
+											<mat-hint align="start">
+												<strong>Filter</strong> by Status
+											</mat-hint>
+										</mat-form-field>
+									</div>
+						</div>
+						
+						<div class="col-md-4 kt-margin-bottom-30-mobile">
+							<!-- 'm  margin-bottom-10-mobile' for adaptive make-up  -->
+							<div class="kt-form__control">
+								<h5>Total Donation:${{totalPayment}} per month</h5>
+							</div>
+						</div>
+	
+					</div>
+				</div>
+
+		<!-- MATERIAL TABLE | Binded to datasources -->
+		<!-- See off.documentations 'https://material.angular.io/components/table/overview' -->
+		<div class="mat-table__wrapper">
+			<mat-table class="lmat-elevation-z8" #table [dataSource]="dataSource" matSort>
+				<!-- Checkbox Column -->
+				<!-- Table with selection -->
+				<!-- https://run.stackblitz.com/api/angular/v1?file=app%2Ftable-selection-example.ts -->
+				<ng-container matColumnDef="select">
+					<mat-header-cell *matHeaderCellDef class="mat-column-checkbox">
+						<mat-checkbox (change)="$event ? masterToggle() : null"
+							[checked]="selection.hasValue() && isAllSelected()"
+							[indeterminate]="selection.hasValue() && !isAllSelected()">
+						</mat-checkbox>
+					</mat-header-cell>
+					<mat-cell *matCellDef="let row" class="mat-column-checkbox">
+						<mat-checkbox (click)="$event.stopPropagation()"
+							(change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
+						</mat-checkbox>
+					</mat-cell>
+				</ng-container>
+
+				<ng-container matColumnDef="ID">
+					<!-- ATTRIBUTE mat-sort-header  for sorting | https://material.angular.io/components/sort/overview -->
+					<mat-header-cell *matHeaderCellDef mat-sort-header>ID</mat-header-cell>
+					<mat-cell *matCellDef="let Subscriptions">{{Subscriptions.id}}</mat-cell>
+				</ng-container>
+
+				<ng-container matColumnDef="Amount">
+					<mat-header-cell *matHeaderCellDef mat-sort-header>Amount</mat-header-cell>
+					<mat-cell *matCellDef="let Subscriptions">${{Subscriptions.amount}}</mat-cell>
+				</ng-container>
+
+				<ng-container matColumnDef="Organization">
+					<mat-header-cell *matHeaderCellDef mat-sort-header>Organization</mat-header-cell>
+					<mat-cell *matCellDef="let Subscriptions">{{getOrgName(Subscriptions.user_id)}}</mat-cell>
+				</ng-container>
+
+				<ng-container matColumnDef="Campaign">
+					<mat-header-cell *matHeaderCellDef mat-sort-header>Campaign</mat-header-cell>
+					<mat-cell *matCellDef="let Subscriptions">{{Subscriptions.campaign_id}}</mat-cell>
+				</ng-container>
+
+				<ng-container matColumnDef="status">
+					<mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
+					<mat-cell *matCellDef="let Subscriptions">
+						<span *ngIf="Subscriptions.status=='1'"
+							class="kt-badge kt-badge--inline kt-badge--pill kt-badge--success kt-badge--wide">Active</span>
+						<span *ngIf="Subscriptions.status=='0'"
+							class="kt-badge kt-badge--inline kt-badge--pill kt-badge--danger kt-badge--wide">Not
+							Active</span>
+
+					</mat-cell>
+				</ng-container>
+
+				<ng-container matColumnDef="StartDate">
+					<mat-header-cell *matHeaderCellDef mat-sort-header>Start_Date</mat-header-cell>
+					<mat-cell *matCellDef="let Subscriptions">{{Subscriptions.start_date|date}}</mat-cell>
+				</ng-container>
+				<ng-container matColumnDef="current_period_start">
+					<mat-header-cell *matHeaderCellDef mat-sort-header>current_period_start</mat-header-cell>
+					<mat-cell *matCellDef="let Subscriptions">{{Subscriptions.current_period_start|date}}</mat-cell>
+				</ng-container>
+				<ng-container matColumnDef="current_period_end">
+					<mat-header-cell *matHeaderCellDef mat-sort-header>current_period_end</mat-header-cell>
+					<mat-cell *matCellDef="let Subscriptions">{{Subscriptions.current_period_end|date}}</mat-cell>
+				</ng-container>
+
+
+
+				<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+
+				<mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+			</mat-table>
+			<div class="mat-table__message" *ngIf="SubscriptionsResult!=null&&SubscriptionsResult.length==0">No courses
+				found</div><!-- Message for empty data  -->
+			<div class="mat-table__message" *ngIf="SubscriptionsResult==null">Please wait....</div>
+		</div>
+
+		<!-- start: BOTTOM -->
+		<div class="mat-table__bottom">
+			<!-- MATERIAL SPINNER | Url: 'https://material.angular.io/components/progress-spinner/overview' -->
+			<!-- <mat-spinner [diameter]="20" *ngIf="dataSource==null"></mat-spinner> -->
+			<!-- MATERIAL PAGINATOR | Binded to dasources -->
+			<!-- See off.documentations 'https://material.angular.io/components/paginator/overview' -->
+			<mat-paginator [pageSize]="10" [pageSizeOptions]="[3, 5, 10]"></mat-paginator>
+		</div>
+		<!-- end: BOTTOM -->
+	</kt-portlet-body>
+	<!-- end::Body -->
+</kt-portlet>

@@ -1,0 +1,80 @@
+<kt-portlet>
+    <kt-portlet-header title="Social Profiles" [class]="'kt-portlet__head--lg'">
+        <ng-container ktPortletTools>
+            <a [routerLink]="['../']" class="btn btn-secondary kt-margin-r-10" mat-raised-button
+                matTooltip="Back to home">
+                <i class="la la-arrow-left"></i>
+                <span class="kt-hidden-mobile">Back</span>
+            </a>
+            <a href="javascript:;" class="btn btn-secondary kt-margin-r-10" (click)="reset()" mat-raised-button
+                matTooltip="Reset changes">
+                <i class="la la-cog"></i>
+                <span class="kt-hidden-mobile">Reset</span>
+            </a>
+            <a href="javascript:;" class="btn btn-primary kt-margin-r-10" color="primary" (click)="onSumbit(false)"
+                mat-raised-button matTooltip="Save & Continue">
+                <span>Save</span>
+            </a>
+        </ng-container>
+    </kt-portlet-header>
+
+    <kt-portlet-body>
+        <!--begin::Form-->
+        <div *ngIf="socialProfiles">
+            <form [formGroup]="socialProfilesForm" class="kt-form kt-form--group-seperator-dashed">
+                <kt-alert *ngIf="hasFormErrors" type="warn" [showCloseButton]="true" [duration]="50000"
+                    (close)="onAlertClose($event)">
+                    Oh snap! Change a few things up and try submitting again.
+                </kt-alert>
+                <div class="kt-form__section kt-form__section--first">
+                    <div class="form-group kt-form__group row">
+                        <div class="col-lg-6 col-md-6 kt-margin-bottom-20-mobile">
+                            <mat-form-field class="mat-form-field-fluid">
+                                <input matInput placeholder="Enter Google Plus Link" formControlName="googlePlus" />
+                                <mat-error>Google Plus Link is
+                                    <strong>required</strong>
+                                </mat-error>
+                                <mat-hint align="start">Please enter
+                                    <strong>Google Plus Link</strong>
+                                </mat-hint>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-6 col-md-6 kt-margin-bottom-20-mobile">
+                            <mat-form-field class="mat-form-field-fluid">
+                                <input matInput placeholder="Enter Facebook Link" formControlName="facebook" />
+                                <mat-error>Facebook Link is
+                                    <strong>required</strong>
+                                </mat-error>
+                                <mat-hint align="start">Please enter
+                                    <strong>Facebook Link</strong>
+                                </mat-hint>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="form-group kt-form__group row">
+                        <div class="col-lg-6 col-md-6 kt-margin-bottom-20-mobile">
+                            <mat-form-field class="mat-form-field-fluid">
+                                <input matInput placeholder="Enter Twitter Link" formControlName="twitter" />
+                                <mat-hint align="start">Please enter
+                                    <strong>Twitter Link</strong>
+                                </mat-hint>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-6 col-md-6 kt-margin-bottom-20-mobile">
+                            <mat-form-field class="mat-form-field-fluid">
+                                <input matInput placeholder="Enter Instagram Link" formControlName="instagram" />
+                                <mat-error>Instagram Link is
+                                    <strong>required</strong>
+                                </mat-error>
+                                <mat-hint align="start">Please enter
+                                    <strong>Instagram Link</strong>
+                                </mat-hint>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </kt-portlet-body>
+</kt-portlet>

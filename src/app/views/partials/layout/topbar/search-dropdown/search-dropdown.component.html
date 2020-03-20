@@ -1,0 +1,42 @@
+<!--begin: Search -->
+<div ngbDropdown (openChange)="openChange()" placement="bottom" autoClose="outside" class="kt-header__topbar-item kt-header__topbar-item--search dropdown">
+	<div ngbDropdownToggle class="kt-header__topbar-wrapper">
+		<span class="kt-header__topbar-icon" [ngClass]="type ? 'kt-header__topbar-icon--'+type : ''">
+			<i *ngIf="!useSVG" [ngClass]="icon"></i>
+			<span class="kt-svg-icon" *ngIf="useSVG" [inlineSVG]="icon"></span>
+		</span>
+	</div>
+	<div ngbDropdownMenu class=" dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim dropdown-menu-xl">
+		<div [ngClass]="{'kt-quick-search--has-result': data?.length}" class="kt-quick-search kt-quick-search--dropdown kt-quick-search--result-compact" id="kt_quick_search_dropdown">
+
+
+			<div class="custom-control custom-checkbox custom-control-inline pr-4">
+				<input type="checkbox" class="custom-control-input" id="defaultInline1">
+				<label class="custom-control-label" for="defaultInline1">Campaig</label>
+			  </div>
+
+			  <!-- Default inline 2-->
+			  <div class="custom-control custom-checkbox custom-control-inline pr-4">
+				<input type="checkbox" class="custom-control-input" id="defaultInline2">
+				<label class="custom-control-label" for="defaultInline2">Donation</label>
+			  </div>
+
+			  <!-- Default inline 3-->
+			  <div class="custom-control custom-checkbox custom-control-inline">
+				<input type="checkbox" class="custom-control-input" id="defaultInline3">
+				<label class="custom-control-label" for="defaultInline3">Member</label>
+			  </div>
+
+
+<!-- Search form -->
+<form class="form-inline active-cyan-4 pt-3 pl-2">
+  <input class="form-control form-control-sm mr-3 w-75" type="text" placeholder="Search"
+    aria-label="Search">
+  <i class="fas fa-search" aria-hidden="true"></i>
+</form>
+
+
+
+</div>
+<!--end: Search -->
+

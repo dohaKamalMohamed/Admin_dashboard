@@ -1,0 +1,85 @@
+<kt-portlet>
+	<!-- PORTLET LOADING | Binded to TABLE Datasource -->
+	<!-- See prop => '~/core/_crud/models/data-sources/_base.datasource.ts' (loading$) -->
+	<kt-portlet-header [title]="'Categories'" [class]="'kt-portlet__head--lg'" >
+		<ng-container ktPortletTools>
+			<button [routerLink]="['./add']" mat-raised-button color="primary">Add New</button>
+			<!-- Buttons (Material Angular) | See off.documenations 'https://material.angular.io/components/button/overview' -->
+			<!-- mat-raised-button | Rectangular contained button w/ elevation  -->
+		</ng-container>
+	</kt-portlet-header>
+	<!-- end::Header -->
+	<!-- start::Body (attribute: ktPortletBody) -->
+	<kt-portlet-body>
+		<!-- start::FILTERS & GROUP ACTIONS -->
+		<div class="kt-form kt-margin-b-50">
+			<!-- start::GROUP ACTIONS -->
+			<!-- Group actions list: 'Delete selected' | 'Fetch selected' | 'Update status for selected' -->
+			<!-- end::GROUP ACTIONS -->
+		</div>
+		<!-- end::FILTERS & GROUP ACTIONS -->
+		<!-- MATERIAL TABLE | Binded to datasources -->
+		<!-- See off.documentations 'https://material.angular.io/components/table/overview' -->
+		<div class="mat-table__wrapper">
+			<mat-table class="lmat-elevation-z8"
+				#table
+				[dataSource]="dataSource"
+				matSort
+				>
+				<!-- Checkbox Column -->
+				<!-- Table with selection -->
+				<!-- https://run.stackblitz.com/api/angular/v1?file=app%2Ftable-selection-example.ts -->
+				<ng-container matColumnDef="ID">
+					<!-- ATTRIBUTE mat-sort-header  for sorting | https://material.angular.io/components/sort/overview -->
+					<mat-header-cell *matHeaderCellDef mat-sort-header>ID</mat-header-cell>
+					<mat-cell *matCellDef="let Categorie">{{Categorie.id}}</mat-cell>
+				</ng-container>
+				<ng-container matColumnDef="slug">
+					<mat-header-cell *matHeaderCellDef mat-sort-header>Slug</mat-header-cell>
+					<mat-cell *matCellDef="let Categorie">{{Categorie.slug}}</mat-cell>
+				</ng-container>
+
+				<ng-container matColumnDef="Name">
+						<mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+						<mat-cell *matCellDef="let Categorie">{{Categorie.name}}</mat-cell>
+					</ng-container>
+                <ng-container matColumnDef="Status">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
+                    <mat-cell *matCellDef="let Categorie">
+							<span *ngIf="Categorie.mode=='on'" class="kt-badge kt-badge--inline kt-badge--pill kt-badge--success kt-badge--wide">{{Categorie.mode}}</span>
+							<span *ngIf="Categorie.mode=='off'" class="kt-badge kt-badge--inline kt-badge--pill kt-badge--danger kt-badge--wide">{{Categorie.mode}}</span>
+					</mat-cell>
+				</ng-container>
+
+				<ng-container matColumnDef="Actions">
+					<mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
+					<mat-cell *matCellDef="let Categorie" class="mr-4">
+						<button (click)="editCategorie(Categorie.id)" mat-icon-button color="primary">
+							<mat-icon>create</mat-icon>
+						</button>&nbsp;
+						<button (click)="deleteCategorie(Categorie.id)" mat-icon-button color="warn">
+							<mat-icon>delete</mat-icon>
+						</button>&nbsp;
+					</mat-cell>
+				</ng-container>
+
+				<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+				<mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+			</mat-table>
+			<div class="mat-table__message" *ngIf="CategorieResult!=null&&CategorieResult.length==0">No Categorie found</div><!-- Message for empty data  -->
+			<div class="mat-table__message" *ngIf="CategorieResult==null">Please wait....</div>
+		</div>
+
+		<!-- start: BOTTOM -->
+		<div class="mat-table__bottom">
+			<!-- MATERIAL SPINNER | Url: 'https://material.angular.io/components/progress-spinner/overview' -->
+			<!-- <mat-spinner [diameter]="20" *ngIf="dataSource==null"></mat-spinner> -->
+			<!-- MATERIAL PAGINATOR | Binded to dasources -->
+			<!-- See off.documentations 'https://material.angular.io/components/paginator/overview' -->
+			<mat-paginator [pageSize]="10" [pageSizeOptions]="[3, 5, 10]"  ></mat-paginator>
+		</div>
+		<!-- end: BOTTOM -->
+	</kt-portlet-body>
+	<!-- end::Body -->
+</kt-portlet>
+

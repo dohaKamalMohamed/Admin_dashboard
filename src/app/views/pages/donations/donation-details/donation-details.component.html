@@ -1,0 +1,39 @@
+<div class="body-container kt-invoice__body" style="text-align:center;margin:15px" *ngIf="donations">
+    <div class="kt-invoice__items">
+
+        <div class="kt-invoice__item">
+            <span style="margin:5px;font-family: 'Roboto', sans-serif;font-size: 13px;font-weight:bold;">DONOR_ID:</span>
+            <span>{{ donations.donor_id}}</span>
+        </div>
+        <div class="kt-invoice__item">
+            <span style="margin:5px;font-family: 'Roboto', sans-serif;font-size: 13px;font-weight:bold;">ORGANIZATION_ID
+                :</span>
+            <span>{{ donations.user_id}}</span>
+        </div>
+        <div class="kt-invoice__item">
+            <span style="margin:5px;font-family: 'Roboto', sans-serif;font-size: 13px;font-weight:bold;">CAMPAIGN_ID :</span>
+            <span>{{ donations.campaign_id}}</span>
+        </div>
+        <div class="kt-invoice__item">
+            <span style="margin:5px;font-family: 'Roboto', sans-serif;font-size: 13px;font-weight:bold;">Donnation
+                 :</span>
+            <span>${{ donations.donation}}</span>
+        </div>
+        <div class="kt-invoice__item">
+            <span style="margin:5px;font-family: 'Roboto', sans-serif;font-size: 13px;font-weight:bold;">
+                Country :</span>
+            <span>Country</span>
+        </div>
+        <div class="kt-invoice__item">
+            <span style="margin:5px;font-family: 'Roboto', sans-serif;font-size: 13px;font-weight:bold;">
+                Date :</span>
+            <span>{{ donations.date}}</span>
+        </div>
+        <div class="kt-invoice__item">
+            <span style="margin:5px;font-family: 'Roboto', sans-serif;font-size: 13px;font-weight:bold;">
+                TAX_ID :</span>
+            <span>{{ donations.txn_id}}</span>
+        </div>
+    </div>
+
+</div>
