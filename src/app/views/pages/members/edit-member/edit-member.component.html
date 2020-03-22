@@ -1,13 +1,13 @@
 <kt-portlet>
-    <kt-portlet-header [title]="getComponentTitle()" [class]="'kt-portlet__head--lg'" [viewLoading$]="loading$">
+    <kt-portlet-header [title]="getComponentTitle()" [class]="'kt-portlet__head--lg'">
         <ng-container ktPortletTools>
-            <a [routerLink]="['../']" class="btn btn-secondary kt-margin-r-10" mat-raised-button
+            <a [routerLink]="['./']" class="btn btn-secondary kt-margin-r-10" mat-raised-button
                 matTooltip="Back to the users list">
                 <i class="la la-arrow-left"></i>
                 <span class="kt-hidden-mobile">Back</span>
             </a>
             <a href="javascript:;" class="btn btn-secondary kt-margin-r-10" (click)="reset()"
-                [disabled]="selectedTab !== 0" mat-raised-button matTooltip="Reset changes">
+                 mat-raised-button matTooltip="Reset changes">
                 <i class="la la-cog"></i>
                 <span class="kt-hidden-mobile">Reset</span>
             </a>
