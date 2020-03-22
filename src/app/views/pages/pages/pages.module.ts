@@ -41,6 +41,8 @@ import {
 
 import { FetchEntityDialogComponent } from '../../partials/content/crud';
 import { ActionNotificationComponent } from '../../partials/content/crud';
+import {AlertComponentModule} from '../alert-component/alert-component.module';
+import {AlertComponentComponent} from '../alert-component/alert-component.component'
 @NgModule({
   declarations: [PagesComponent, EditPageComponent],
   imports: [
@@ -54,8 +56,13 @@ import { ActionNotificationComponent } from '../../partials/content/crud';
 				path: 'add',
 				component: EditPageComponent
 			},
+			{
+				path: 'edit/:id',
+				component: EditPageComponent
+			},
 		]),FormsModule,
 		ReactiveFormsModule,
+		AlertComponentModule,
 		FileUploadModule,
 		Ng2ImgMaxModule,
 		HttpClientModule,
@@ -107,7 +114,8 @@ import { ActionNotificationComponent } from '../../partials/content/crud';
 	  ],
 	  entryComponents: [
 		FetchEntityDialogComponent,
-		ActionNotificationComponent
+		ActionNotificationComponent,
+		AlertComponentComponent
 	  ],
 	 })
 

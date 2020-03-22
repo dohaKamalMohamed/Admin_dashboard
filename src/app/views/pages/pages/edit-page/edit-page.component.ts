@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy , ChangeDetectorRef} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -6,8 +6,12 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 // RxJS
 import { Subscription } from 'rxjs';
 import { LayoutUtilsService, MessageType } from '../../../../core/_base/crud';
+
+import {AlertComponentComponent} from '../../alert-component/alert-component.component';
+import {MatDialog } from '@angular/material';
     
-import { Pages } from '../../../../core/auth/_models/Pages.model'
+import { Pages } from '../../../../core/auth/_models/Pages.model';
+import { pagesService } from '../../../../core/auth/_services/Pages.service';
 
 @Component({
   selector: 'kt-edit-page',
@@ -19,15 +23,7 @@ export class EditPageComponent implements OnInit, OnDestroy {
 	oldpage;
 	pageForm: FormGroup;
 	hasFormErrors = false;
-
-	page: Pages = {
-		ID:'15',
-    Title:'Cover processing fee',
-		Slug_URL:'http://localhost:3000/api/upload',
-		showNavbar:true
-		,content:'content'
-	} //remove that in real back end;
-	
+	page: Pages 
 	
 	// Private properties
 	private subscriptions: Subscription[] = [];
@@ -47,6 +43,9 @@ export class EditPageComponent implements OnInit, OnDestroy {
 		private router: Router,
 		private pageFB: FormBuilder,
 		private layoutUtilsService: LayoutUtilsService,
+		private cdr: ChangeDetectorRef,
+		private pagesService:pagesService,
+		public dialog: MatDialog,
 	) { }
 
 	/**
@@ -58,16 +57,27 @@ export class EditPageComponent implements OnInit, OnDestroy {
 	 */
 	ngOnInit() {
 	this.oldpage=	this.page ;
-	
-		this.createForm();
-		//real backend
-		/*let page = this.generalpageService.getGeneralpage().subscribe(res=>{
-			this.page =res;
-			this.createForm();
-		});
-		  this.subscriptions.push(page)
-		*/
 
+	const routeSubscription = this.activatedRoute.params.subscribe(params => {
+		const id = params['id'];
+		if (id && id > 0) {
+			let category = this.pagesService.getPageByID(id).subscribe(res => {
+				if (res.success == true) {
+					this.page = res.data
+					this.oldpage = Object.assign({}, this.page);
+					this.createForm();
+					this.cdr.detectChanges()
+				}
+			})
+
+		} else {
+			this.page = new Pages();
+			this.oldpage = Object.assign({}, this.page);
+			this.createForm();
+		}
+	})
+	this.subscriptions.push(routeSubscription)
+	
 	}
 
 	ngOnDestroy() {
@@ -84,9 +94,10 @@ export class EditPageComponent implements OnInit, OnDestroy {
 	 */
 	createForm() {
 		this.pageForm = this.pageFB.group({
-			Slug_URL: [this.page.Slug_URL, Validators.required],
-			Title: [this.page.Title, Validators.required],
-			showNavbar: [this.page.showNavbar, Validators.required],
+			Slug_URL: [this.page.slug, Validators.required],
+			Title: [this.page.title, Validators.required],
+			showNavbar: [this.page.show_navbar, Validators.required],
+			content: [this.page.content, Validators.required],
 		});
 	}
 
@@ -123,25 +134,38 @@ export class EditPageComponent implements OnInit, OnDestroy {
 			Object.keys(controls).forEach(controlTitle =>
 				controls[controlTitle].markAsTouched()
 			);
-
+ 
 			this.hasFormErrors = true;
 			return;
 		}
 		const editedpage = this.prepareUser();
-		this.updatepage(editedpage, withBack);
+		if(this.page.id){
+			this.updatepage(editedpage, withBack);
+		}else{
+			this.addPage(editedpage, withBack);
+		}
+		
+	}
+
+	getTitle(){
+		if(this.page&&this.page.id){
+			return 'Edit Page'
+		}else{
+			return 'Add New Page'
+		}
 	}
 
 	/**
 	 * Returns prepared data for save
 	 */
-	prepareUser(): Pages {
+	prepareUser():Pages {
 		const controls = this.pageForm.controls;
 		const _page = new Pages();
-		_page.Slug_URL = controls.Slug_URL.value;
-		_page.Title = controls.Title.value;
-		_page.showNavbar = controls.showNavbar.value;
-   
-    delete _page.ID
+		_page.slug = controls.Slug_URL.value;
+		_page.title = controls.Title.value;
+		_page.show_navbar = controls.showNavbar.value;
+    _page.content= controls.content.value;
+    delete _page.id
 		return _page;
 	}
 
@@ -152,11 +176,46 @@ export class EditPageComponent implements OnInit, OnDestroy {
 	 * @param withBack: boolean
 	 */
 	updatepage(_page: Pages, withBack: boolean = false) {
-		console.log(_page)
-		/* real backend
-let updatepage
-this.subscriptions.push(updatepage);
-*/
+		const dialogRef = this.dialog.open(AlertComponentComponent, {
+			width: '40%',
+			data: { 'title': 'Update Page', 'message': 'Are You sure you want to update this page?' },
+		});
+		dialogRef.afterClosed().subscribe(res => {
+			if (!res) {
+				return;
+			} else {
+			let deleteCategorie=this.pagesService.updatePage(this.page.id,_page).subscribe(res=>{
+					if(res.success==true){
+						this.layoutUtilsService.showActionNotification('updated succefully')
+						this.router.navigate(['/pages'])
+						this.cdr.detectChanges()
+					}
+				})
+				this.subscriptions.push(deleteCategorie)
+			}
+		});
+		
+	}
+
+	addPage(_page: Pages, withBack: boolean = false){
+		const dialogRef = this.dialog.open(AlertComponentComponent, {
+			width: '40%',
+			data: { 'title': 'Add Page', 'message': 'Are You sure you want to add this page?' },
+		});
+		dialogRef.afterClosed().subscribe(res => {
+			if (!res) {
+				return;
+			} else {
+			let deleteCategorie=this.pagesService.addNewPage(_page).subscribe(res=>{
+					if(res.success==true){
+						this.layoutUtilsService.showActionNotification('succefully added')
+						this.router.navigate(['/pages'])
+						this.cdr.detectChanges()
+					}
+				})
+				this.subscriptions.push(deleteCategorie)
+			}
+		});
 	}
 
 	/**

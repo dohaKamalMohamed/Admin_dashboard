@@ -13,6 +13,8 @@ import { ActionNotificationComponent } from '../../partials/content/crud';
 import { PartialsModule } from '../../partials/partials.module';
 import { MembersComponent } from './members/members.component';
 import { EditMemberComponent } from './edit-member/edit-member.component';
+import {AlertComponentModule} from '../alert-component/alert-component.module';
+import {AlertComponentComponent} from '../alert-component/alert-component.component'
 
 import {
   MatInputModule,
@@ -46,6 +48,7 @@ import {
   declarations: [MembersComponent, EditMemberComponent],
   imports: [
     CommonModule,
+    AlertComponentModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
@@ -109,7 +112,8 @@ import {
     LayoutUtilsService
   ],
   entryComponents: [
-		ActionNotificationComponent,
+    ActionNotificationComponent,
+    AlertComponentComponent
 	],
 })
 export class MembersModule { }

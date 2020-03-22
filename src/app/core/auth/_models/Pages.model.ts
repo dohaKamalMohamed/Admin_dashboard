@@ -1,8 +1,8 @@
 export class Pages {
-	ID : string;
-	Title :string;
-	Slug_URL : string;
-	showNavbar:boolean;
-	content:string;
+	id : number;
+	title :string;
+	content : string;
+	show_navbar:string;
+	slug:string;
 }
  

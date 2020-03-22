@@ -25,13 +25,7 @@ export class EditCampaignComponent implements OnInit  , OnDestroy {
 	pageForm: FormGroup;
 	hasFormErrors = false;
 
-	page: Pages = {
-		ID:'15',
-    Title:'Cover processing fee',
-		Slug_URL:'http://localhost:3000/api/upload',
-		showNavbar:true
-		,content:'content'
-	} //remove that in real back end;
+	page: Pages 
 	public uploader:FileUploader= new FileUploader({url: URL, itemAlias: 'upload'}); 
 	imageprivew;
 	format;
@@ -145,21 +139,21 @@ export class EditCampaignComponent implements OnInit  , OnDestroy {
 			return;
 		}
 		const editedpage = this.prepareUser();
-		this.updatepage(editedpage, withBack);
+		//this.updatepage(editedpage, withBack);
 	}
 
 	/**
 	 * Returns prepared data for save
 	 */
-	prepareUser(): Pages {
-		const controls = this.pageForm.controls;
-		const _page = new Pages();
-		_page.Slug_URL = controls.Slug_URL.value;
-		_page.Title = controls.Title.value;
-		_page.showNavbar = controls.showNavbar.value;
+	prepareUser() {
+	// 	const controls = this.pageForm.controls;
+	// 	const _page = new Pages();
+	// 	_page.Slug_URL = controls.Slug_URL.value;
+	// 	_page.Title = controls.Title.value;
+	// 	_page.showNavbar = controls.showNavbar.value;
    
-    delete _page.ID
-		return _page;
+    // delete _page.ID
+	// 	return _page;
 	}
 
 	/**

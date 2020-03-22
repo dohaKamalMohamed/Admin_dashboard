@@ -10,11 +10,28 @@ const _url = CreateURL.createURL;
 })
  
 export class pagesService {
-  campaignsURL = _url('admin/campaigns');
+  pagesURL = _url('admin/pages');
   constructor(private http: HttpClient) { }
   headers: HttpHeaders = new HttpHeaders().set('Content-Type', 'application/json');
-  getAllCampaigns(): Observable<any> {
-    return this.http.get<any>(`${this.campaignsURL}`)
+
+  
+  getAllpages(): Observable<any> {
+    return this.http.get<any>(`${this.pagesURL}`)
   }
 
+  getPageByID(id): Observable<any> {
+    return this.http.get<any>(`${this.pagesURL}/${id}`)
+  }
+
+  addNewPage(page): Observable<any> {
+    return this.http.post<any>(`${this.pagesURL}` ,page)
+  }
+
+  deletePage(id): Observable<any> {
+    return this.http.delete<any>(`${this.pagesURL}/${id}`)
+  }
+
+  updatePage(id,page): Observable<any> {
+    return this.http.put<any>(`${this.pagesURL}/${id}` ,page)
+  }
 }

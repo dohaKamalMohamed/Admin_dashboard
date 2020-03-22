@@ -21,7 +21,7 @@ import {
   MatInputModule,
   MatPaginatorModule,
   MatProgressSpinnerModule,
-  MatSortModule,
+  MatSortModule, 
   MatTableModule,
   MatSelectModule,
   MatMenuModule,

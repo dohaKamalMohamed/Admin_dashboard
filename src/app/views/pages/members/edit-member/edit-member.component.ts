@@ -1,21 +1,23 @@
-import { Component, OnInit, OnDestroy ,ChangeDetectorRef} from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material';
 // RxJS
 import { Subscription } from 'rxjs';
 import { LayoutUtilsService, MessageType } from '../../../../core/_base/crud';
-     //Upload Image
+//Upload Image
 import { FileUploader } from 'ng2-file-upload';
 import { Ng2ImgMaxService } from 'ng2-img-max';
 import { SubheaderService } from '../../../../core/_base/layout';
 import { Members } from '../../../../core/auth/_models/member.model';
 import { memberService } from '../../../../core/auth/_services/members.service';
+import { AlertComponentComponent } from '../../alert-component/alert-component.component';
 const URL = 'http://localhost:3000/api/upload';
 
 @Component({
-  selector: 'kt-edit-member',
-  templateUrl: './edit-member.component.html',
-  styleUrls: ['./edit-member.component.scss']
+	selector: 'kt-edit-member',
+	templateUrl: './edit-member.component.html',
+	styleUrls: ['./edit-member.component.scss']
 })
 export class EditMemberComponent implements OnInit, OnDestroy {
 	// Public properties
@@ -23,8 +25,9 @@ export class EditMemberComponent implements OnInit, OnDestroy {
 	memberForm: FormGroup;
 	hasFormErrors = false;
 	member: Members
+	allCountries
 
-	public uploader:FileUploader= new FileUploader({url: URL, itemAlias: 'upload'});
+	public uploader: FileUploader = new FileUploader({ url: URL, itemAlias: 'upload' });
 	imageprivew;
 	// Private properties
 	private subscriptions: Subscription[] = [];
@@ -47,7 +50,8 @@ export class EditMemberComponent implements OnInit, OnDestroy {
 		private _ng2ImgMax: Ng2ImgMaxService,
 		private memberService: memberService,
 		private subheaderService: SubheaderService,
-		private CDR:ChangeDetectorRef
+		private dialog: MatDialog,
+		private CDR: ChangeDetectorRef
 	) { }
 
 	/**
@@ -78,7 +82,8 @@ export class EditMemberComponent implements OnInit, OnDestroy {
 				this.oldmember = Object.assign({}, this.member);
 				this.initcategory()
 			}
-		})
+		});
+		this.getAllCountries()
 		this.subscriptions.push(routeSubscription)
 		this.uploader.onAfterAddingFile = (file) => { file.withCredentials = false; };
 		this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
@@ -91,12 +96,24 @@ export class EditMemberComponent implements OnInit, OnDestroy {
 		this.subscriptions.forEach(sb => sb.unsubscribe());
 	}
 
+	getAllCountries() {
+		this.memberService.getAllCountries().subscribe(res => {
+			if (res.success == true) {
+				this.allCountries = res.data;
+				this.CDR.detectChanges();
+			}
+		})
+	}
 	createForm() {
 		this.memberForm = this.memberFB.group({
-		name: [this.member.name, Validators.required],
-		email: [this.member.email, Validators.required],
-        role: [this.member.role, Validators.required],
-        password: [this.member.password, Validators.required],
+			name: [this.member.name, Validators.required],
+			email: [this.member.email, Validators.required],
+			role: [this.member.role, Validators.required],
+			phone: [this.member.phone, Validators.required],
+			country: [parseInt(this.member.countries_id), Validators.required],
+			address: [this.member.address, Validators.required],
+			password: [''],
+			password_confirmation: [''],
 		});
 	}
 
@@ -119,10 +136,10 @@ export class EditMemberComponent implements OnInit, OnDestroy {
 		]);
 	}
 
-	getComponentTitle(){
-		if(!this.member.id){
+	getComponentTitle() {
+		if (this.member && !this.member.id) {
 			return 'Create Member'
-		}else{
+		} else {
 			return 'Edit Member'
 		}
 	}
@@ -161,7 +178,12 @@ export class EditMemberComponent implements OnInit, OnDestroy {
 			return;
 		}
 		const editedmember = this.prepareUser();
-		this.updatemember(editedmember, withBack);
+		if (this.member.id) {
+			this.updatemember(editedmember, withBack);
+		} else {
+			this.addNewMember(editedmember, withBack)
+		}
+
 	}
 
 	/**
@@ -170,25 +192,80 @@ export class EditMemberComponent implements OnInit, OnDestroy {
 	prepareUser(): Members {
 		const controls = this.memberForm.controls;
 		const _member = new Members();
-		_member.name = controls.URL.value;
-		_member.email = controls.Name.value;
-		_member.password = controls.Status.value;
-		// _member.Role=controls.Role.value;
+		_member.name = controls.name.value;
+		_member.email = controls.email.value;
+		if (!controls.password.value) {
+			delete _member.password
+		} else {
+			_member.password = controls.password.value;
+		}
+		_member.role = controls.role.value;
+		_member.address = controls.address.value;
+		_member.phone = controls.phone.value;
+		_member.countries_id = controls.country.value;
 		delete _member.id
 		return _member;
 	}
-		/**
-	 * Add User
-	 *
-	 * @param _member: generalmember
-	 * @param withBack: boolean
-	 */
+	/**
+ * Add User
+ *
+ * @param _member: generalmember
+ * @param withBack: boolean
+ */
 	updatemember(_member: Members, withBack: boolean = false) {
-		console.log(_member)
-		/* real backend
-let updatemember
-this.subscriptions.push(updatemember);
-*/
+
+		const dialogRef = this.dialog.open(AlertComponentComponent, {
+			width: '40%',
+			data: { 'title': 'Update Member', 'message': 'Are You sure you want to update this member?' },
+		});
+		dialogRef.afterClosed().subscribe(res => {
+			if (!res) {
+				return;
+			} else {
+				this.memberService.updateMember(this.member.id, _member).subscribe(res => {
+					if (res.success == true) {
+						this.layoutUtilsService.showActionNotification('Saved Succefully');
+						this.router.navigateByUrl('/dashboard')
+						this.CDR.detectChanges()
+					} else {
+
+					}
+				}, error => {
+
+				})
+			}
+		})
+
+	}
+
+	addNewMember(_member: Members, withBack: boolean = false) {
+		if (!this.memberForm.controls['password_confirmation'].value) {
+			this.hasFormErrors = true;
+			return
+		}
+		_member['password_confirmation'] = this.memberForm.controls['password_confirmation'].value
+		const dialogRef = this.dialog.open(AlertComponentComponent, {
+			width: '40%',
+			data: { 'title': 'Add New Member', 'message': 'Are You sure you want to add this member?' },
+		});
+		dialogRef.afterClosed().subscribe(res => {
+			if (!res) {
+				return;
+			} else {
+				this.memberService.addNewMember(_member).subscribe(res => {
+					if (res.success == true) {
+						this.layoutUtilsService.showActionNotification('Saved Succefully');
+						this.router.navigateByUrl('/dashboard')
+						this.CDR.detectChanges()
+					} else {
+
+					}
+				}, error => {
+
+				})
+			}
+		})
+		
 	}
 
 	/**
@@ -229,7 +306,7 @@ this.subscriptions.push(updatemember);
 					//this.uploader.uploadAll();
 					//console.log(result);
 					reader.onload = (event: ProgressEvent) => {
-				    	this.imageprivew = (<FileReader>event.target).result;
+						this.imageprivew = (<FileReader>event.target).result;
 					}
 					reader.readAsDataURL(event.target.files[0]);
 				},
