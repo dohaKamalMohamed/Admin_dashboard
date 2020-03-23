@@ -13,7 +13,7 @@ import { MatDialog } from '@angular/material';
 import { Categorie } from '../../../../core/auth/_models/Categorie.model';
 import { categoriesService } from '../../../../core/auth/_services/categorie.service';
 import { AlertComponentComponent } from '../../alert-component/alert-component.component';
-const URL = ' https://donatetogo.org/public/img-category';
+const URL = 'https://sandbox.donatetogo.org/api/admin/categories';
 
 @Component({
 	selector: 'kt-edit-category',
@@ -29,7 +29,8 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
 	@ViewChild('input_image', { static: false }) input_image: ElementRef;
 	public uploader: FileUploader = new FileUploader({ url: URL, itemAlias: 'upload' });
 	imageprivew;
-	errorMessage
+	errorMessage;
+	selectedFile
 	// Private properties
 	private subscriptions: Subscription[] = [];
 
@@ -85,7 +86,7 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
 		this.uploader.onAfterAddingFile = (file) => { file.withCredentials = false; };
 		this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
 			console.log('ImageUpload:uploaded:', item, status, response);
-			alert('File uploaded successfully');
+			
 		};
 	}
 
@@ -157,35 +158,18 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
 			return;
 		}
 		const editedcategory = this.prepareUser();
-      console.log(editedcategory)
-     
-
-		//if (this.input_image.nativeElement.value != '') {
-
-			// if(this.category.image){
-			// 	editedcategory['old_image'] = this.category.image
-			// 	this.uploader.onBuildItemForm = (fileItem: any, form: any) => {
-			// 		form.append('old_image', this.category.image);
-			// 	};
-			// }
-
-			// this.uploader.uploadAll();
-			// this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
-			// 	var responsePath = JSON.parse(response);
-			// 	if (responsePath.result) {
-			// 		// this.workout.image_url = responsePath.image;
-			// 		editedcategory['image'] = responsePath.data;
-			// 		console.log(editedcategory['image'])
-			// 	}
-			// }
-
-		//	editedcategory['image'] = this.input_image.nativeElement.value;
-	//	}
+		const editedCategory : FormData = new FormData();
+		console.log('hhhhhhhhhhhhhhhhhhhhhh',editedcategory,editedcategory.image,editedcategory.image.name)
+		editedCategory.append('name',editedcategory.name)
+		editedCategory.append('slug',editedcategory.slug)
+		editedCategory.append('mode',editedcategory.mode)
+		editedCategory.append('image',editedcategory.image,editedcategory.image.name)
+		console.log(editedCategory)
 		if (this.category.id) {
 			
-			this.updatecategory(editedcategory);
+			this.updatecategory(editedCategory);
 		} else {
-			this.createNewCategory(editedcategory)
+			this.createNewCategory(editedCategory)
 		}
 
 	}
@@ -198,17 +182,13 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
 		_category.name = controls.name.value;
 		_category.slug = controls.slug.value;
 		_category.mode = controls.mode.value;
-		console.log(this.categoryForm.controls['image'].value)
-		if(this.categoryForm.controls['image'].value){
-			_category.image = new FormData();
-			_category.image.append('image',this.categoryForm.controls['image'].value,this.categoryForm.controls['image'].value.name);
-			console.log(_category.image)
+		if(controls.image.value){
+			_category.image=controls.image.value
 		}else{
 			delete _category.image
 		}
 		
 		delete _category.id
-
 		return _category;
 	}
 
@@ -291,6 +271,7 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
 				result => {
 
 					const file = <File>event.target.files[0];
+					this.selectedFile=<File>event.target.files[0];
 		 	         this.categoryForm.controls['image'].setValue(file, {emitModelToViewChange: false})
 					const newImage = new File([result], result.name);
 					this.uploader.clearQueue();

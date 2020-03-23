@@ -12,7 +12,8 @@ const _url = CreateURL.createURL;
 export class categoriesService {
   categoriesURL = _url('admin/categories');
   constructor(private http: HttpClient) { }
-  headers: HttpHeaders = new HttpHeaders().set('Content-Type', 'application/json');
+  headers: HttpHeaders = new HttpHeaders().set('Content-Type', ['application/json', 'multipart/form-data']);
+  
   getAllcategories(): Observable<any> {
     return this.http.get<any>(`${this.categoriesURL}`)
   }
@@ -26,10 +27,7 @@ export class categoriesService {
   }
 
   postCategorie(category): Observable<any> {
-    return this.http.post<any>(`${this.categoriesURL}`,category,{
-      reportProgress:true,
-      observe:'events'
-    })
+    return this.http.post<any>(`${this.categoriesURL}`,category)
   }
 
   updateCategory(id,category): Observable<any> {
